@@ -1,0 +1,6 @@
+{
+    "sonarlint.connectedMode.project": {
+        "connectionId": "dieo20011",
+        "projectKey": "your_project_key"
+    }
+}

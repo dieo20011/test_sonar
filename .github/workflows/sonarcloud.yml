@@ -1,0 +1,38 @@
+name: SonarCloud Scan
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  sonarcloud:
+    name: SonarCloud Scan
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '14'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run tests with coverage
+        run: npm test -- --watch=false --code-coverage
+
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@v1
+        with:
+          args: >
+            -Dsonar.projectKey=dieo20011_test_sonar
+            -Dsonar.organization=dieo20011
+            -Dsonar.sources=src
+            -Dsonar.tests=src
+            -Dsonar.test.inclusions="**/*.spec.ts"
+            -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
