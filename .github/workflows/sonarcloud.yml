@@ -1,38 +1,20 @@
-name: SonarCloud Scan
-
+name: Build
 on:
   push:
     branches:
       - main
   pull_request:
     types: [opened, synchronize, reopened]
-
 jobs:
   sonarcloud:
-    name: SonarCloud Scan
+    name: SonarCloud
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v3
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
         with:
-          node-version: '14'
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Run tests with coverage
-        run: npm test -- --watch=false --code-coverage
-
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
       - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@v1
-        with:
-          args: >
-            -Dsonar.projectKey=dieo20011_test_sonar
-            -Dsonar.organization=dieo20011
-            -Dsonar.sources=src
-            -Dsonar.tests=src
-            -Dsonar.test.inclusions="**/*.spec.ts"
-            -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: a3a20680941f4bd9b4e331795f9a0a8f6f90c53c  # Needed to get PR information, if any
+          SONAR_TOKEN: 76fb3b7bd1733589aa449e9247ec450fa1b73d68
